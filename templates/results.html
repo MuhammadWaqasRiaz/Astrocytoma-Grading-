@@ -1,0 +1,9 @@
+<h2>Prediction Results</h2>
+<ul>
+  {% for result in results %}
+    <li>
+      <strong>{{ result.filename }}</strong>: {{ result.label }} (Confidence: {{ result.confidence }})
+    </li>
+  {% endfor %}
+</ul>
+<a href="/">Go Back</a>

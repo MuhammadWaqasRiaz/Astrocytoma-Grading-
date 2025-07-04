@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Astrocytoma Grading</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Styling -->
+    <style>
+        body {
+            background: linear-gradient(to right, #e0f7fa, #f1f8e9);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .title-header {
+            font-weight: bold;
+            color: #0277bd;
+        }
+        .form-container {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.03);
+        }
+        .card-img-top {
+            border-radius: 10px 10px 0 0;
+            max-height: 350px;
+            width: 100%;
+            object-fit: contain;
+            background-color: #f8f9fa;
+            padding: 5px;
+        }
+        .table thead {
+            background-color: #00796b;
+            color: white;
+        }
+        .btn-primary {
+            background-color: #00796b;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #004d40;
+        }
+        .btn-success {
+            background-color: #388e3c;
+            border: none;
+        }
+        .btn-success:hover {
+            background-color: #2e7d32;
+        }
+
+        /* Responsive table font for smaller screens */
+        @media (max-width: 768px) {
+            table, th, td {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <h2 class="text-center mb-5 title-header">Astrocytoma Grading - Medical Image Classifier</h2>
+
+        <!-- Upload Form -->
+        <form method="POST" enctype="multipart/form-data" class="form-container mb-5">
+            <div class="mb-3">
+                <label for="file" class="form-label fw-semibold">Upload Astrocytoma Images (Multiple allowed)</label>
+                <input class="form-control" type="file" name="file" multiple accept="image/*" required>
+            </div>
+            <button class="btn btn-primary w-100">Upload & Predict</button>
+        </form>
+
+        <!-- Prediction Results -->
+        {% if predictions %}
+            <h4 class="mb-4 text-success">Astrocytoma Grading Predictions</h4>
+            <div class="row g-4">
+                {% for filename, top_preds, img_url in predictions %}
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="card h-100 shadow-sm">
+                            <img src="{{ url_for('static', filename=img_url) }}" class="card-img-top" alt="Prediction Image">
+                            <div class="card-body">
+                                <h6 class="card-title text-center fw-bold text-info">Top 3 Predictions</h6>
+                                <ul class="list-group list-group-flush">
+                                    {% for label, conf in top_preds %}
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span>{{ label }}</span>
+                                            <span class="fw-semibold text-success">{{ conf }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Prediction Table -->
+        {% if table %}
+            <h4 class="mt-5 mb-3 text-primary">Prediction Summary Table</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Filename</th>
+                            <th>Top 1</th>
+                            <th>Top 2</th>
+                            <th>Top 3</th>
+                            <th>Datetime</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in table %}
+                            <tr>
+                                <td>{{ row['Filename'] }}</td>
+                                <td>{{ row['Top 1'] }}</td>
+                                <td>{{ row['Top 2'] }}</td>
+                                <td>{{ row['Top 3'] }}</td>
+                                <td>{{ row['Datetime'] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <a href="{{ url_for('static', filename='predictions.csv') }}" class="btn btn-success mt-3" download>
+                    Download CSV
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
