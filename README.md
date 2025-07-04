@@ -1,2 +1,3 @@
 # Astrocytoma-Grading-
-Astrocytoma Grading Using InceptionV3 with CV Bases User Interface for real time inferencing
+For real-time inferencing, we proposed a model that is a CV-based user Interface, used to classify astrocytoma grading using the InceptionV3 model, which is a state-of-the-art architecture and very efficient.
+We make a fully responsive CV-based user interface that can be used on all types of devices, and in this web page, we can select one image for classification or a couple of images for classification. In the output, our proposed model will show the percentage that each image has how much percent belongs to which astrocytoma grade, like Grade-I, Grade-II, Grade-III, or Grade-IV.
